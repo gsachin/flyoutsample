@@ -8,8 +8,22 @@ namespace flyoutsample.ViewModels
 {
     public class AboutViewModel : BaseViewModel
     {
-        private List<Quantity> qtyList;
-        public List<Quantity> QtyList
+        private List<UInt16> qtyList;
+        private UInt16 _selectedQty;
+        private Boolean _showQtyListDialog;
+        private Boolean _showQtyEntryDialog;
+        public ICommand OpenQtyDialog { get; set; }
+        public Boolean ShowQtyList { 
+            get {
+                return _showQtyListDialog;
+            } set {
+                _showQtyListDialog = value;
+                //_showQtyEntryDialog = false;
+                OnPropertyChanged();
+            }
+        }
+
+        public List<UInt16> QtyList
         {
             get { return qtyList; }
             set
@@ -22,23 +36,58 @@ namespace flyoutsample.ViewModels
             }
         }
 
-        public Quantity SelectedQty { get; set; }
+        public UInt16 SelectedQty {
+            get {
+                return _selectedQty;
+            }
+            set {
+
+                _selectedQty = value;
+                if (value >= 10)
+                {
+                    ShowQtyList = false;
+                    ShowQtyEntryDialog = true;
+
+                }
+                OnPropertyChanged();
+            } 
+        }
+
+        public bool ShowQtyEntryDialog { 
+            get 
+                {
+                return _showQtyEntryDialog;
+                }
+            set {
+                _showQtyEntryDialog = value;
+                ShowQtyList = false;
+                OnPropertyChanged();
+            }
+        }
+
         public AboutViewModel()
         {
             Title = "About";
-            OpenWebCommand = new Command(async () => {
-               
-            });
-            List<Quantity> list = new List<Quantity>();
-            for(int i = 0; i <= 10; i++){
-                list.Add(new Quantity(i.ToString(), i));
+
+            List<UInt16> list = new List<UInt16>();
+            for (int i = 1; i <= 10; i++)
+            {
+                list.Add((UInt16)i);
             }
             QtyList = list;
+            OpenQtyDialog = new Command(OnSelectQtyClicked);
         }
 
-        public ICommand OpenWebCommand { get; }
-    }
+        private void OnSelectQtyClicked(object obj)
+        {
+            // Prefixing with `//` switches to a different navigation stack instead of pushing to the active one
+            //await Shell.Current.GoToAsync($"//{nameof(AboutPage)}");
+            ShowQtyList = true;
+        }
 
+        // public ICommand OpenWebCommand { get; }
+
+    }
     public class Quantity {
 
         public Quantity(string displayLable, int qtyValue)

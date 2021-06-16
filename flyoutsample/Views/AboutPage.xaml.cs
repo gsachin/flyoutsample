@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using System;
+using Xamarin.Forms;
 
 namespace flyoutsample.Views
 {
@@ -8,5 +9,20 @@ namespace flyoutsample.Views
         {
             InitializeComponent();
         }
+        protected void OnButtonClicked(object sender, EventArgs args)
+        {
+            //overlay.IsVisible = true;
+        }
+
+        protected void OnOkButtonClicked(object sender, EventArgs args)
+        {
+            
+        }
+
+        protected void OnCancelButtonClicked(object sender, EventArgs args)
+        {
+            //overlay.IsVisible = false;
+        }
+
     }
 }
